@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "змейка", "змейка\змейка.csproj", "{A83CF7BC-A58E-468B-B45D-BAF27D3F89C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A83CF7BC-A58E-468B-B45D-BAF27D3F89C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83CF7BC-A58E-468B-B45D-BAF27D3F89C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83CF7BC-A58E-468B-B45D-BAF27D3F89C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83CF7BC-A58E-468B-B45D-BAF27D3F89C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8F165DC2-4D61-4783-9687-2228181147B4}
+	EndGlobalSection
+EndGlobal
