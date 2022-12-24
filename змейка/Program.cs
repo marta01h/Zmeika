@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -52,165 +51,163 @@ namespace Змейка
 
             for (var i = 0; i < _size.Height; i++)
             {
-                if (i == 0  i == _size.Height - 1)
+                if (i == 0 || i == _size.Height - 1)
                 {
-                $"+{new string('-', _size.Width - 2)}+".Write(0, i);
-            }
+                    $"+{new string('-', _size.Width - 2)}+".Write(0, i);
+                }
                 else
-            {
-                $"|{new string(' ', _size.Width - 2)}|".Write(0, i);
+                {
+                    $"|{new string(' ', _size.Width - 2)}|".Write(0, i);
+                }
             }
         }
-    }
 
-    private static void Draw()
-    {
-        for (var i = 1; i < _size.Height - 1; i++)
+        private static void Draw()
         {
-            new string(' ', _size.Width - 2).Write(1, i, ConsoleColor.Red, ConsoleColor.Black);
+            for (var i = 1; i < _size.Height - 1; i++)
+            {
+                new string(' ', _size.Width - 2).Write(1, i, ConsoleColor.Red, ConsoleColor.Black);
+            }
+
+            _head.Write("0", ConsoleColor.DarkGreen, ConsoleColor.Black);
+            _tail.Write("o", ConsoleColor.Green, ConsoleColor.Black);
+            _fruit.Write("*", ConsoleColor.Cyan, ConsoleColor.Black);
+
+            $"Рекорд: {_tail.Count()}".Write(_size.Width + 3, 5);
         }
 
-        _head.Write("0", ConsoleColor.DarkGreen, ConsoleColor.Black);
-        _tail.Write("o", ConsoleColor.Green, ConsoleColor.Black);
-        _fruit.Write("*", ConsoleColor.Cyan, ConsoleColor.Black);
-
-        $"Рекорд: {_tail.Count()}".Write(_size.Width + 3, 5);
-    }
-
-    private static void Input()
-    {
-        if (!Console.KeyAvailable) { return; }
-
-        var key = Console.ReadKey(false).Key;
-
-        if (key == ConsoleKey.UpArrow) { _direction = Direction.Up; }
-        else if (key == ConsoleKey.DownArrow) { _direction = Direction.Down; }
-        else if (key == ConsoleKey.LeftArrow) { _direction = Direction.Left; }
-        else if (key == ConsoleKey.RightArrow) { _direction = Direction.Right; }
-        else if (key == ConsoleKey.Escape) { _direction = Direction.Stop; }
-    }
-
-    private static void Logic()
-    {
-        if (_direction == Direction.Stop) { return; }
-
-        if (_tail.Contains(_head))
+        private static void Input()
         {
-            _gameOver = true;
-            _direction = Direction.Stop;
-            return;
+            if (!Console.KeyAvailable) { return; }
+
+            var key = Console.ReadKey(false).Key;
+
+            if (key == ConsoleKey.UpArrow) { _direction = Direction.Up; }
+            else if (key == ConsoleKey.DownArrow) { _direction = Direction.Down; }
+            else if (key == ConsoleKey.LeftArrow) { _direction = Direction.Left; }
+            else if (key == ConsoleKey.RightArrow) { _direction = Direction.Right; }
+            else if (key == ConsoleKey.Escape) { _direction = Direction.Stop; }
         }
 
-        _tail.Add(_head.Copy());
-
-        if (_head == _fruit) { _fruit = RandomPoint(); }
-        else { _tail.RemoveFirst(); }
-
-        if (_direction == Direction.Up)
+        private static void Logic()
         {
-            if (_head.Y - 1 < 1) { _head.Y = _size.Height - 2; }
-            else { _head.Y--; }
+            if (_direction == Direction.Stop) { return; }
+
+            if (_tail.Contains(_head))
+            {
+                _gameOver = true;
+                _direction = Direction.Stop;
+                return;
+            }
+
+            _tail.Add(_head.Copy());
+
+            if (_head == _fruit) { _fruit = RandomPoint(); }
+            else { _tail.RemoveFirst(); }
+
+            if (_direction == Direction.Up)
+            {
+                if (_head.Y - 1 < 1) { _head.Y = _size.Height - 2; }
+                else { _head.Y--; }
+            }
+            else if (_direction == Direction.Down)
+            {
+                if (_head.Y + 1 > _size.Height - 2) { _head.Y = 1; }
+                else { _head.Y++; }
+            }
+            else if (_direction == Direction.Left)
+            {
+                if (_head.X - 1 < 1) { _head.X = _size.Width - 2; }
+                else { _head.X--; }
+            }
+            else if (_direction == Direction.Right)
+            {
+                if (_head.X + 1 > _size.Width - 2) { _head.X = 1; }
+                else { _head.X++; }
+            }
         }
-        else if (_direction == Direction.Down)
+
+        private static void End()
         {
-            if (_head.Y + 1 > _size.Height - 2) { _head.Y = 1; }
-            else { _head.Y++; }
+            $"ПРОИГРЫШ".Write(_size.Width + 3, 3, ConsoleColor.Red, ConsoleColor.White);
+            $"Нажми пробел для повторной игры".Write(_size.Width + 3, 4, ConsoleColor.Black, ConsoleColor.Gray);
+
+            if (Console.ReadKey(true).Key == ConsoleKey.Spacebar) { Start(); }
         }
-        else if (_direction == Direction.Left)
+
+        public static Point RandomPoint()
         {
-            if (_head.X - 1 < 1) { _head.X = _size.Width - 2; }
-            else { _head.X--; }
-        }
-        else if (_direction == Direction.Right)
-        {
-            if (_head.X + 1 > _size.Width - 2) { _head.X = 1; }
-            else { _head.X++; }
-        }
-    }
+            var x = _random.Next(1, _size.Width - 1);
+            var y = _random.Next(1, _size.Height - 1);
+            var point = new Point(x, y);
 
-    private static void End()
-    {
-        $"ПРОИГРЫШ".Write(_size.Width + 3, 3, ConsoleColor.Red, ConsoleColor.White);
-        $"Нажми пробел для повторной игры".Write(_size.Width + 3, 4, Con
-soleColor.Black, ConsoleColor.Gray);
-
-        if (Console.ReadKey(true).Key == ConsoleKey.Spacebar) { Start(); }
-    }
-
-    public static Point RandomPoint()
-    {
-        var x = _random.Next(1, _size.Width - 1);
-        var y = _random.Next(1, _size.Height - 1);
-        var point = new Point(x, y);
-
-        if (_tail.Contains(point)  _head == point) { return RandomPoint(); }
+            if (_tail.Contains(point) || _head == point) { return RandomPoint(); }
             else { return point; }
-    }
-}
-
-public static class Extensions
-{
-    public static void RemoveFirst<T>(this List<T> list)
-    {
-        if (list.Any())
-        {
-            list.Remove(list.First());
         }
     }
 
-    public static void RemoveLast<T>(this List<T> list)
+    public static class Extensions
     {
-        if (list.Any())
+        public static void RemoveFirst<T>(this List<T> list)
         {
-            list.Remove(list.Last());
+            if (list.Any())
+            {
+                list.Remove(list.First());
+            }
         }
-    }
 
-    public static Point Copy(this Point point)
-    {
-        return new Point(point.X, point.Y);
-    }
+        public static void RemoveLast<T>(this List<T> list)
+        {
+            if (list.Any())
+            {
+                list.Remove(list.Last());
+            }
+        }
 
-    public static void Write(this IEnumerable<Point> points, string text)
-    {
-        foreach (var point in points)
+        public static Point Copy(this Point point)
+        {
+            return new Point(point.X, point.Y);
+        }
+
+        public static void Write(this IEnumerable<Point> points, string text)
+        {
+            foreach (var point in points)
+            {
+                Write(text, point.X, point.Y);
+            }
+        }
+
+        public static void Write(this IEnumerable<Point> points, string text, ConsoleColor foreground, ConsoleColor background)
+        {
+            foreach (var point in points)
+            {
+                Write(text, point.X, point.Y, foreground, background);
+            }
+        }
+
+        public static void Write(this Point point, string text)
         {
             Write(text, point.X, point.Y);
         }
-    }
 
-    public static void Write(this IEnumerable<Point> points, string text, ConsoleColor foreground, ConsoleColor background)
-    {
-        foreach (var point in points)
+        public static void Write(this Point point, string text, ConsoleColor foreground, ConsoleColor background)
         {
             Write(text, point.X, point.Y, foreground, background);
         }
-    }
 
-    public static void Write(this Point point, string text)
-    {
-        Write(text, point.X, point.Y);
-    }
+        public static void Write(this string text, int x, int y)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write(text);
+        }
 
-    public static void Write(this Point point, string text, ConsoleColor foreground, ConsoleColor background)
-    {
-        Write(text, point.X, point.Y, foreground, background);
-    }
-
-    public static void Write(this string text, int x, int y)
-    {
-        Console.SetCursorPosition(x, y);
-        Console.Write(text);
-    }
-
-    public static void Write(this string text, int x, int y, ConsoleColor foreground, ConsoleColor background)
-    {
-        Console.SetCursorPosition(x, y);
-        Console.ForegroundColor = foreground;
-        Console.BackgroundColor = background;
-        Console.Write(text);
-        Console.ResetColor();
+        public static void Write(this string text, int x, int y, ConsoleColor foreground, ConsoleColor background)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = foreground;
+            Console.BackgroundColor = background;
+            Console.Write(text);
+            Console.ResetColor();
+        }
     }
 }
-}
-
